@@ -18,8 +18,8 @@ on:
     inputs:
       param:
         description: 'parameter'
-        required: false
-        default: ''
+        required: true
+        default: 'x86_64,r4s,n1,rockchip,armv8'
 
 env:
   TOKEN_KIDDIN9: ${{ secrets.TOKEN_KIDDIN9 }}
