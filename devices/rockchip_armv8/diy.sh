@@ -25,3 +25,12 @@ sed -i -e 's,wpad-openssl,wpad-basic-mbedtls,g' target/linux/rockchip/image/armv
 sed -i -e '/KERNEL_TESTING_PATCHVER/d' -e 's/DEFAULT_PACKAGES +=/DEFAULT_PACKAGES += fdisk lsblk kmod-drm-rockchip luci-app-diskman/' -e 's/autocore-arm/autocore/' target/linux/rockchip/Makefile
 
 sed -i 's/Ariaboard/光影猫/' target/linux/rockchip/image/armv8.mk
+
+# 1. 修改后台IP（默认192.168.1.1）
+sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
+
+# 2. 修改主机名
+sed -i 's/OpenWrt/KWRT-Router/g' package/base-files/files/bin/config_generate
+
+# 3. 开启 Wi-Fi（ARM设备）
+sed -i 's/disabled='\''1'\''/disabled='\''0'\''/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
