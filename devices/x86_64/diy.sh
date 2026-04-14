@@ -14,4 +14,11 @@ sed -i 's/DEFAULT_PACKAGES +=/DEFAULT_PACKAGES += kmod-fs-f2fs kmod-mmc kmod-sdh
 
 sed -i 's/256/1024/g' target/linux/x86/image/Makefile
 
+# 1. 修改后台IP（默认192.168.1.1）
+sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
 
+# 2. 修改主机名
+sed -i 's/OpenWrt/KWRT-Router/g' package/base-files/files/bin/config_generate
+
+# 3. 开启 Wi-Fi（ARM设备）
+sed -i 's/disabled='\''1'\''/disabled='\''0'\''/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
