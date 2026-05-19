@@ -10,6 +10,14 @@ name: Build OpenWrt
 
 on: 
   repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Target device (e.g. x86_64, mediatek_filogic)'
+        required: true
+        default: 'x86_64'
+        type: string
+
 
 env:
   REPO_TOKEN: ${{ secrets.TOKEN_KIDDIN9 }}
