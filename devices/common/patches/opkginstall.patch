@@ -13,8 +13,8 @@
  			const avail = packages.available.pkgs[name];
  			const inst  = packages.installed.pkgs[name];
  
--			if (!inst || !inst.installed)
-+			if (!inst || !inst.installed || pkg.name.includes('kmod-') || pkg.name.includes('busybox') || pkg.name.includes('base-files'))
+-			if (!isPkgInstalled(inst))
++			if (!isPkgInstalled(inst) || pkg.name.includes('busybox') || pkg.name.includes('base-files'))
  				continue;
  
  			if (!avail || compareVersion(avail.version, pkg.version) <= 0)
@@ -22,8 +22,8 @@
  					'data-action': 'install',
  					'click': handleInstall
  				}, _('Install…'));
--			else if (inst.installed && inst.version != pkg.version)
-+			else if (inst.installed && compareVersion(pkg.version, inst.version) > 0)
+-			else if (isPkgInstalled(inst) && inst.version !== pkg.version)
++			else if (isPkgInstalled(inst) && compareVersion(pkg.version, inst.version) > 0)
  				btn = E('div', {
  					'class': 'btn cbi-button-positive',
  					'data-package': name,
@@ -63,7 +63,7 @@
  	render(listData) {
 +			const checkUpdateNeeded = function() {
 +            return Promise.all([
-+                L.resolveDefault(fs.stat('/tmp/opkg-lists'), null),
++                L.resolveDefault(fs.stat('/tmp/opkg-lists/kwrt_kiddin9'), null),
 +                L.resolveDefault(fs.read('/tmp/resolv.conf.d/resolv.conf.auto'), '')
 +            ]).then(function(results) {
 +                const stat = results[0];

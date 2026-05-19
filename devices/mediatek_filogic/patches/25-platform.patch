@@ -71,7 +71,7 @@
 @@ -135,12 +124,16 @@ platform_do_upgrade() {
  	glinet,gl-xe3000|\
  	huasifei,wh3000|\
- 	huasifei,wh3000-pro|\
+ 	huasifei,wh3000-pro-emmc|\
 +	philips,hy3000|\
 +	sl,3000*|\
 +	bt,r320|\
@@ -109,7 +109,7 @@
  	glinet,gl-mt2500-airoha|\
  	glinet,gl-mt6000|\
 @@ -363,6 +351,9 @@ platform_copy_config() {
- 	huasifei,wh3000-pro|\
+ 	huasifei,wh3000-pro-emmc|\
  	jdcloud,re-cp-03|\
  	nradio,c8-668gl|\
 +	philips,hy3000|\
