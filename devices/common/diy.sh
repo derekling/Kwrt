@@ -87,3 +87,9 @@ sed -i "s/OpenWrt/Kwrt/g" package/base-files/files/bin/config_generate package/b
 sed -i -e "s/set \${s}.country='\${country || ''}'/set \${s}.country='\${country || \"CN\"}'/g" -e "s/set \${s}.disabled=.*/set \${s}.disabled='0'/" package/network/config/wifi-scripts/files/lib/wifi/mac80211.uc
 
 rm -rf package/feeds/packages/jool
+
+# 修复 luci-base 编译时缺少 NOTICE 文件的问题
+# kiddin9/op-packages 的 luci-base Makefile 尝试 cp ../../NOTICE（从 feeds/luci/ 根目录），
+# 但 openwrt-25.12 分支的 feeds/luci/ 可能没有该文件，导致 cp: cannot stat '../../NOTICE' 报错
+[ ! -f feeds/luci/NOTICE ] && touch feeds/luci/NOTICE
+[ ! -f feeds/luci/LICENSE ] && touch feeds/luci/LICENSE
