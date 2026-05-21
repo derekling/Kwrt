@@ -11,9 +11,12 @@ sed -i '/	refresh_config();/d' scripts/feeds
 
 sed -i "s?git.openwrt.org/\(project\|feed\)?github.com/openwrt?g" feeds.conf.default
 
-./scripts/feeds update -a
-./scripts/feeds install -a -p kiddin9 -f
-./scripts/feeds install -a
+./scripts/feeds update -a || true
+./scripts/feeds install -a -p kiddin9 -f || true
+./scripts/feeds install -a || true
+
+# 删除有问题的 webd 包（Makefile 的 PKG_HASH:=skip 和架构检测与 openwrt-25.12 不兼容）
+rm -rf feeds/kiddin9/webd feeds/kiddin9/luci-app-webd package/feeds/kiddin9/webd package/feeds/kiddin9/luci-app-webd
 
 sed --follow-symlinks -i "s#%C\"#%C by Kiddin'\"#" package/base-files/files/etc/os-release
 sed -i -e '$a /etc/bench.log' \
