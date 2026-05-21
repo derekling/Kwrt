@@ -11,12 +11,16 @@ sed -i '/	refresh_config();/d' scripts/feeds
 
 sed -i "s?git.openwrt.org/\(project\|feed\)?github.com/openwrt?g" feeds.conf.default
 
+# 在 feeds update 前排除有问题的包，避免 feeds install 报错
+# webd: Makefile 的 PKG_HASH:=skip 和架构检测与 openwrt-25.12 不兼容
+sed -i '/webd/d' feeds.conf.default 2>/dev/null || true
+
 ./scripts/feeds update -a || true
 ./scripts/feeds install -a -p kiddin9 -f || true
 ./scripts/feeds install -a || true
 
-# 删除有问题的 webd 包（Makefile 的 PKG_HASH:=skip 和架构检测与 openwrt-25.12 不兼容）
-rm -rf feeds/kiddin9/webd feeds/kiddin9/luci-app-webd package/feeds/kiddin9/webd package/feeds/kiddin9/luci-app-webd
+# 清除有问题的 webd 包残留
+rm -rf feeds/kiddin9/webd feeds/kiddin9/luci-app-webd package/feeds/kiddin9/webd package/feeds/kiddin9/luci-app-webd 2>/dev/null || true
 
 sed --follow-symlinks -i "s#%C\"#%C by Kiddin'\"#" package/base-files/files/etc/os-release
 sed -i -e '$a /etc/bench.log' \
@@ -91,8 +95,11 @@ sed -i -e "s/set \${s}.country='\${country || ''}'/set \${s}.country='\${country
 
 rm -rf package/feeds/packages/jool
 
-# 修复 luci-base 编译时缺少 NOTICE 文件的问题
+# 修复 luci-base 编译时缺少 NOTICE/LICENSE 文件的问题
 # kiddin9/op-packages 的 luci-base Makefile 尝试 cp ../../NOTICE（从 feeds/luci/ 根目录），
 # 但 openwrt-25.12 分支的 feeds/luci/ 可能没有该文件，导致 cp: cannot stat '../../NOTICE' 报错
-[ ! -f feeds/luci/NOTICE ] && touch feeds/luci/NOTICE
-[ ! -f feeds/luci/LICENSE ] && touch feeds/luci/LICENSE
+touch feeds/luci/NOTICE 2>/dev/null || true
+touch feeds/luci/LICENSE 2>/dev/null || true
+
+# 确保脚本退出码为 0
+exit 0
